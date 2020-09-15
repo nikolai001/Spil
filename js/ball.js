@@ -16,6 +16,14 @@ export default class Ball {
         this.GameHeight = game.GameHeight;
 
         this.game = game;
+
+        this.reset()
+    }
+
+    reset(){
+        this.position = {x: 10, y: 400};
+
+        this.Speed = {x: 5, y: 4};
     }
 
     draw(ctx){
@@ -32,8 +40,13 @@ export default class Ball {
             this.Speed.x = -this.Speed.x
         }
 
-        if(this.position.y + this.Size > this.GameHeight || this.position.y < 0){
+        if(this.position.y < 0){
             this.Speed.y = -this.Speed.y
+        }
+
+        if(this.position.y + this.Size > this.GameHeight ){
+            this.game.lives--;
+            this.reset();
         }
 
        if (detectCollision(this, this.game.paddle)){

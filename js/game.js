@@ -20,7 +20,9 @@ export default class Game {
 
         this.gameObjects = [];
 
-        this.lives = 1;
+        this.lives = 2;
+
+        this.bricks = [];
 
         this.ball = new Ball(this);
 
@@ -33,9 +35,9 @@ export default class Game {
 
         if (this.GameState !== GameState.MENU)return;
 
-        let bricks = BuildLevel(this,level1);
+        this.bricks = BuildLevel(this,level1);
 
-        this.gameObjects = [this.ball, this.paddle,...bricks];
+        this.gameObjects = [this.ball, this.paddle];
 
         this.GameState = GameState.RUNNING;
 
@@ -47,13 +49,17 @@ export default class Game {
 
         if (this.GameState === GameState.PAUSED || this.GameState === GameState.MENU || this.GameState === GameState.GAMEOVER)return;
 
-        this.gameObjects.forEach((object)=>object.update(deltaTime));
+        if(this.bricks.length === 0){
 
-        this.gameObjects = this.gameObjects.filter(object=>!object.MarkedForDeletion);
+        }
+
+        [...this.gameObjects,...this.bricks].forEach((object)=>object.update(deltaTime));
+
+        this.bricks = this.bricks.filter(brick=>!brick.MarkedForDeletion);
     }
 
     draw(ctx){
-        this.gameObjects.forEach((object)=>object.draw(ctx));
+        [...this.gameObjects,...this.bricks].forEach((object)=>object.draw(ctx));
 
         if (this.GameState === GameState.PAUSED){
             ctx.rect(0,0,this.GameWidth,this.GameHeight);
