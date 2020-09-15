@@ -4,6 +4,10 @@ import InputHandler from "./input.js";
 import Brick from "./brick.js";
 import { BuildLevel, level1 } from "./levels.js";
 
+const GameState = {
+
+}
+
 export default class Game {
     constructor(GameWidth,GameHeight) {
         this.GameWidth = GameWidth;
@@ -19,15 +23,21 @@ export default class Game {
 
         this.gameObjects = [this.ball, this.paddle,...bricks];
 
-        new InputHandler(this.paddle);
+        new InputHandler(this.paddle, this);
     }
 
     update(deltaTime){
         this.gameObjects.forEach((object)=>object.update(deltaTime));
+
+        this.gameObjects = this.gameObjects.filter(object=>!object.MarkedForDeletion);
     }
 
     draw(ctx){
         this.gameObjects.forEach((object)=>object.draw(ctx));
+
+    }
+
+    togglePause(){
 
     }
 
