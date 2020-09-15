@@ -9,8 +9,6 @@ const GameHeight = 600;
 
 let game = new Game(GameWidth,GameHeight);
 
-game.start();
-
 let lastTime = 0;
 
 function GameLoop(timestamp) {
