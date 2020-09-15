@@ -1,5 +1,7 @@
 import Paddle from "./paddle.js";
 
+import InputHandler from "./input.js";
+
 let canvas = document.querySelector("#GameScreen");
 let ctx = canvas.getContext("2d");
 
@@ -9,9 +11,13 @@ const GameHeight = 600;
 
 let paddle = new Paddle(GameWidth,GameHeight);
 
+new InputHandler(paddle);
+
 paddle.draw(ctx);
 
 let lastTime = 0;
+
+
 
 function GameLoop(timestamp) {
     let deltaTime = timestamp -lastTime;
