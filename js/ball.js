@@ -11,6 +11,8 @@ export default class Ball {
         this.GameWidth = game.GameWidth;
 
         this.GameHeight = game.GameHeight;
+
+        this.game = game;
     }
 
     draw(ctx){
@@ -21,12 +23,28 @@ export default class Ball {
         this.position.x += this.Speed.x;
         this.position.y += this.Speed.y;
 
+        //Wall
+
         if(this.position.x + this.Size > this.GameWidth || this.position.x < 0){
             this.Speed.x = -this.Speed.x
         }
 
         if(this.position.y + this.Size > this.GameHeight || this.position.y < 0){
             this.Speed.y = -this.Speed.y
+        }
+
+        //Paddle
+
+        let BottomOfBall = this.position.y + this.Size;
+
+        let TopOfPaddle = this.game.paddle.position.y;
+
+        let LeftSidePaddle = this.game.paddle.position.x;
+        let RightSidePaddle = this.game.paddle.position.x + this.game.paddle.width;
+
+        if(BottomOfBall >= TopOfPaddle && this.position.x >= LeftSidePaddle && this.position.x + this.Size <= RightSidePaddle){
+            this.Speed.y = -this.Speed.y;
+            this.position.y= this.game.paddle.position.y - this.Size;
         }
     }
 }
