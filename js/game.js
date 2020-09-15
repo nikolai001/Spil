@@ -2,13 +2,14 @@ import Paddle from "./paddle.js";
 import Ball from "./ball.js";
 import InputHandler from "./input.js";
 import Brick from "./brick.js";
-import { BuildLevel, level1 } from "./levels.js";
+import { BuildLevel, level1,level2 } from "./levels.js";
 
 const GameState = {
     PAUSED:0,
     RUNNING:1,
     MENU:2,
-    GAMEOVER:3
+    GAMEOVER:3,
+    NEWLEVEL:4
 };
 
 export default class Game {
@@ -22,6 +23,10 @@ export default class Game {
 
         this.lives = 2;
 
+        this.levels = [level1,level2];
+
+        this.CurrentLevel = 0;
+
         this.bricks = [];
 
         this.ball = new Ball(this);
@@ -33,9 +38,11 @@ export default class Game {
 
     start(){
 
-        if (this.GameState !== GameState.MENU)return;
+        if (this.GameState !== GameState.MENU && this.GameState !== GameState.NEWLEVEL)return;
 
-        this.bricks = BuildLevel(this,level1);
+        this.bricks = BuildLevel(this,this.levels[this.CurrentLevel]);
+
+        this.ball.reset();
 
         this.gameObjects = [this.ball, this.paddle];
 
@@ -50,7 +57,9 @@ export default class Game {
         if (this.GameState === GameState.PAUSED || this.GameState === GameState.MENU || this.GameState === GameState.GAMEOVER)return;
 
         if(this.bricks.length === 0){
-
+            this.CurrentLevel ++;
+            this.GameState = GameState.NEWLEVEL;
+            this.start();
         }
 
         [...this.gameObjects,...this.bricks].forEach((object)=>object.update(deltaTime));
